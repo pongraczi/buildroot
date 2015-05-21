@@ -1,0 +1,56 @@
+diff -Nur buildroot-2015.02.orig/package/Config.in buildroot-2015.02/package/Config.in
+--- buildroot-2015.02.orig/package/Config.in	2015-03-01 22:26:12.000000000 +0100
++++ buildroot-2015.02/package/Config.in	2015-05-21 16:56:14.748302012 +0200
+@@ -1335,6 +1335,7 @@
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	source "package/less/Config.in"
+ endif
++        source "package/mc/Config.in"
+ 	source "package/nano/Config.in"
+ 	source "package/uemacs/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+diff -Nur buildroot-2015.02.orig/package/mc/Config.in buildroot-2015.02/package/mc/Config.in
+--- buildroot-2015.02.orig/package/mc/Config.in	1970-01-01 01:00:00.000000000 +0100
++++ buildroot-2015.02/package/mc/Config.in	2015-04-30 21:56:00.000000000 +0200
+@@ -0,0 +1,10 @@
++# mc prefers slang, but can use ncurses too
++config BR2_PACKAGE_MC
++	bool "mc"
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_SLANG if !BR2_PACKAGE_NCURSES
++	help
++	  GNU Midnight Commander is a visual file manager, licensed under GNU General Public License.
++	  It can use either SLang(preferred) or ncurses for screen handling; if neither is enabled SLang will be automatically chosen.
++	  
++	  https://www.midnight-commander.org/
+diff -Nur buildroot-2015.02.orig/package/mc/mc.mk buildroot-2015.02/package/mc/mc.mk
+--- buildroot-2015.02.orig/package/mc/mc.mk	1970-01-01 01:00:00.000000000 +0100
++++ buildroot-2015.02/package/mc/mc.mk	2015-04-30 21:56:00.000000000 +0200
+@@ -0,0 +1,27 @@
++################################################################################
++#
++# mc
++#
++################################################################################
++
++MC_VERSION_MAJOR = 4.8
++MC_VERSION = $(MC_VERSION_MAJOR).13
++MC_SOURCE = mc-$(MC_VERSION).tar.bz2
++MC_SITE = http://ftp.midnight-commander.org
++MC_INSTALL_STAGING = YES
++MC_INSTALL_TARGET = YES
++MC_CONF_OPTS = --disable-shared
++MC_DEPENDENCIES = libglib2 host-pkgconf
++
++# mc prefers slang, so use that if enabled, otherwise
++# fallback to using ncurses.
++# Either or both will be enabled, but we prefer slang.
++ifeq ($(BR2_PACKAGE_SLANG),y)
++MC_DEPENDENCIES += slang
++MC_CONF_OPTS += --with-screen=slang
++else
++MC_DEPENDENCIES += ncurses
++MC_CONF_OPTS += --with-screen=ncurses
++endif
++
++$(eval $(autotools-package))
