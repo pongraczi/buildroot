@@ -10,15 +10,15 @@ Board info:
   The board is an x86 industrial controller with integrated 
   peripherials to easily connect to the field.
 
-  Features:
-    - analog and digital I/O
-    - RS232/485
-    - 1wire
-    - i2c
-    - LAN
-    - 4 x USB2.0/1.1 (2 of them can turn on/off the power)
-    - boot from USB / DOM (Disk On Module) / internal eMMC
-    - designed for supporting Proview Scada system and industrial protocols
+    Features:
+      - analog and digital I/O
+      - RS232/485
+      - 1wire
+      - i2c
+      - LAN
+      - 4 x USB2.0/1.1 (2 of them can turn on/off the power)
+      - boot from USB / DOM (Disk On Module) / internal eMMC
+      - designed for supporting Proview Scada system and industrial protocols
 
 Contact: 
   - Istvan Pongracz  <pongracz.istvan@gmail.com>
